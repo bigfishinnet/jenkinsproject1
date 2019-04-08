@@ -1,0 +1,55 @@
+---
+# Action to get repo a key from a url
+#  - name: Schedule a command to wget the Jenkins repo and import.
+#    shell: wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+
+# Action to import a key from a url
+#  - name: Install Jenkins Repo
+#    rpm_key:
+#      state: present
+#      key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+#---
+#- name: Add repository
+#  yum_repository:
+#    name: jenkins
+#    description: Jenkins yum repo
+#    baseurl: https://pkg.jenkins.io/redhat/jenkins.repo
+
+  - name: Copy Jenkins RPM from local source
+    copy:
+      src: /Users/stephenwe/Downloads/jenkins-2.164.1-1.1.noarch.rpm
+      dest: /home/ec2-user/
+      owner: ec2-user
+      mode: 0644
+
+# Action install Jenkins
+#  - name: Schedule a command to wget the Jenkins repo and import.
+#    shell: sudo rpm -ivh  /home/ec2-user/jenkins-2.164.1-1.1.noarch.rpm
+
+# Using yum
+#  - name: Install uploaded jenkins RPM file using Yum
+#    yum:
+#      name: /user/ec2-user/jenkins-2.164.1-1.1.noarch.rpm
+#      state: present
+
+  - name: install Jenkins
+    yum:
+      name: /user/ec2-user/jenkins-2.164.1-1.1.noarch.rpm
+      state: present
+
+  - name: Start Jenkins Service | Enable on Boot
+    service:
+     name: jenkins
+     state: started
+     enabled: yes
+
+  - name: Get Jenkins password
+    command: cat /var/lib/jenkins/secrets/initialAdminPassword
+    register: jenkinspasswd
+
+  - name: Display Jenkins Passwd 
+    debug: var={{"jenkinspasswd.stdout"}}
+
+# Install (Bottle) python package.
+  - pip:
+    name: jenkins-job-builder
