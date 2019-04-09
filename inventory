@@ -1,5 +1,5 @@
-jmaster ansible_host=99.80.207.240 ansible_user=ec2-user ansible_become=true
-jslave ansible_host=54.171.83.103 ansible_user=ec2-user ansible_become=true
+jmaster ansible_host=99.81.95.154 ansible_user=ec2-user ansible_become=true
+jslave ansible_host=52.213.5.130 ansible_user=ec2-user ansible_become=true
 [master]
 jmaster
 [slave]
